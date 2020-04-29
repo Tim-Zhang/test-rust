@@ -1,6 +1,8 @@
 on:
   pull_request:
     types: [opened]
+  issue_comment:
+    types: [created]
   pull_request_review_comment:
     types: [created, edited]
 name: Watch comments
@@ -20,6 +22,7 @@ jobs:
 
       - if: steps.check.outputs.triggered == 'true'
         uses: tim-actions/dispatch@master
+              tim-actions/dispatch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event: build-agent-multi
