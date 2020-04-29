@@ -1,0 +1,25 @@
+on:
+  pull_request:
+    types: [opened]
+  pull_request_review_comment:
+    types: [created, edited]
+name: Watch comments
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: khan/pull-request-comment-trigger@master
+        id: check
+        with:
+          trigger: '/bam'
+          prefix_only: true
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - run: 'echo Found it!'
+        if: steps.check.outputs.triggered == 'true'
+
+      - if: steps.check.outputs.triggered == 'true'
+        uses: tim-actions/dispatch@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event: build-agent-multi
