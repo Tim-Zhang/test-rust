@@ -1,0 +1,22 @@
+on: [push]
+
+name: Build on different rust versions
+
+jobs:
+  check:
+    name: Build-nightly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            target: x86_64-unknown-linux-musl
+            override: true
+
+      - name: Show rust versoins
+        run: rustc -V
+
+      - name: Do Build
+        run: cargo build --target=x86_64-unknown-linux-musl
